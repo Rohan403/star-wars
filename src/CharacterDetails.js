@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./CharacterDetails.css";
 import Modal from "react-modal";
-import axios from "axios";
 
 export default function CharacterDetails({
   person,
@@ -9,11 +8,10 @@ export default function CharacterDetails({
   onClose,
   people,
   setCharacters,
-  setSelectedCharacter,
 }) {
   const [name, setName] = useState("");
   const [height, setHeight] = useState("");
-  const [movies, setMovies] = useState({ title: "" });
+  const [movies, setMovies] = useState("");
 
   useEffect(() => {
     // Set form fields with data of the selected character for editing
@@ -42,7 +40,7 @@ export default function CharacterDetails({
               ...character,
               name: name,
               height: height,
-              movies: movies.split(",").map((movie) => movie.trim()),
+              movies: [{ title: movies }],
             }
           : character
       );
@@ -69,7 +67,6 @@ export default function CharacterDetails({
     setName("");
     setHeight("");
     setMovies("");
-    //  setSelectedCharacterId(null);
     onClose();
   };
 
@@ -99,11 +96,13 @@ export default function CharacterDetails({
             onChange={(e) => setHeight(e.target.value)}
           />
           <p>Movies</p>
-          <input
+          <textarea
             type="text"
             placeholder="Movies"
             value={movies}
             onChange={(e) => setMovies(e.target.value)}
+            rows={5} // Set the desired number of rows
+            cols={30} // Set the desired number of columns
           />
           <div>
             <button onClick={() => handleAddOrUpdateCharacter()}>Submit</button>

@@ -10,9 +10,6 @@ export default function Character() {
   const [people, setCharacters] = useState([]);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredPeople, setFilteredPeople] = useState([]);
-  const [filmDetails, setFilmDetails] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,23 +74,6 @@ export default function Character() {
     setSelectedCharacter(null);
   };
   
-
-  const getCharacterImageUrl = (name) => {
-    const formattedName = name.toLowerCase().replace(/ /g, "-");
-    return `/img/${formattedName}.jpg`;
-  };
-
-  const handleSearchInputChange = (event) => {
-    setSearchQuery(event.target.value.toLowerCase());
-  };
-
-  useEffect(() => {
-    const filteredPeople = people.filter((person) =>
-      person.name.toLowerCase().includes(searchQuery)
-    );
-    // console.log('filteredPeople..........',filteredPeople)
-    setFilteredPeople(filteredPeople);
-  }, [people, searchQuery]);
 
   const handleRemoveCharacter = (id) => {
     const updatedCharacters = people.filter((character) => character.id !== id);
