@@ -13,6 +13,7 @@ export default function CharacterDetails({
   const [height, setHeight] = useState("");
   const [movies, setMovies] = useState("");
 
+
   useEffect(() => {
     // Set form fields with data of the selected character for editing
     if (person.id !== null) {
@@ -24,7 +25,7 @@ export default function CharacterDetails({
         setHeight(selectedCharacter.height || "");
         setMovies(
           selectedCharacter.movies
-            ? selectedCharacter.movies.map((data) => data.title)
+            ? selectedCharacter.movies.map((data) => data)
             : ""
         );
       }
@@ -40,7 +41,7 @@ export default function CharacterDetails({
               ...character,
               name: name,
               height: height,
-              movies: [{ title: movies }],
+              movies: movies.split(','),
             }
           : character
       );
@@ -54,7 +55,8 @@ export default function CharacterDetails({
         id: people.length + 1,
         name: name,
         height: height,
-        movies: [{ title: movies }],
+        // movies: [{ title: movies }],
+        movies: movies.split(',')
       };
       const updatedCharacters = [...people, newCharacter];
 
@@ -101,8 +103,8 @@ export default function CharacterDetails({
             placeholder="Movies"
             value={movies}
             onChange={(e) => setMovies(e.target.value)}
-            rows={5} // Set the desired number of rows
-            cols={30} // Set the desired number of columns
+            rows={5} 
+            cols={30}
           />
           <div>
             <button onClick={() => handleAddOrUpdateCharacter()}>Submit</button>

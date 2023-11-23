@@ -42,7 +42,7 @@ export default function Character() {
                 id: index + 1,
                 name: character.name,
                 height: character.height,
-                movies: movies.map((title) => ({ title })),
+                movies: movies.map((title) => (title)),
               };
             })
           );
@@ -129,7 +129,7 @@ export default function Character() {
                     <ul>
                       {person.movies.map((movie, movieIndex) => (
                         <li key={movieIndex}>
-                          <p> {movie.title}</p>
+                          <p>{movie}</p>
                         </li>
                       ))}
                     </ul>
