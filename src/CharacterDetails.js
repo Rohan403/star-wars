@@ -25,7 +25,7 @@ export default function CharacterDetails({
         setHeight(selectedCharacter.height || "");
         setMovies(
           selectedCharacter.movies
-            ? selectedCharacter.movies.map((data) => data)
+            ? selectedCharacter.movies.join(',')
             : ""
         );
       }
@@ -33,6 +33,10 @@ export default function CharacterDetails({
   }, [person, people]);
 
   const handleAddOrUpdateCharacter = () => {
+    if (!name?.trim() || !height?.trim() || !movies) {
+      alert("Please fill out all fields.");
+      return;
+    }
     if (person.id && person.id !== null) {
       // Editing existing character
       const updatedCharacters = people.map((character) =>
@@ -41,11 +45,11 @@ export default function CharacterDetails({
               ...character,
               name: name,
               height: height,
-              movies: movies.split(','),
+              movies: movies.split(","),
             }
           : character
       );
-
+      console.log('updatedCharacters......',updatedCharacters)
       // Update the state and localStorage
       setCharacters(updatedCharacters);
       localStorage.setItem("charactersData", JSON.stringify(updatedCharacters));
@@ -56,7 +60,7 @@ export default function CharacterDetails({
         name: name,
         height: height,
         // movies: [{ title: movies }],
-        movies: movies.split(',')
+        movies: movies.split(","),
       };
       const updatedCharacters = [...people, newCharacter];
 
@@ -76,40 +80,63 @@ export default function CharacterDetails({
     <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
-      contentLabel="Character Details"
+      // contentLabel="Character Details"
     >
       <button className="close-button" onClick={onClose}>
         <img src="/img/x-close.svg" alt="Close" />
       </button>
       <div className="modal-content">
+        {/* <div> */}
+        <p>Name</p>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          // onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            // Check if the input matches the regex pattern (only numbers)
+            if (!/\d/.test(e.target.value)) {
+              setName(e.target.value);
+            }
+          }}
+          style={{ padding: 5, borderRadius: 4 }}
+        />
+        <p>Height</p>
+        <input
+          type="text"
+          placeholder="Height"
+          value={height}
+          // onChange={(e) => setHeight(e.target.value)}
+          onChange={(e) => {
+            // Check if the input matches the regex pattern (only numbers)
+            if (/^\d*$/.test(e.target.value)) {
+              setHeight(e.target.value);
+            }
+          }}
+          style={{ padding: 5, borderRadius: 4 }}
+          maxLength={3}
+        />
+        <p>
+          Movies{" "}
+          {person.id == null
+            ? "(If multiple movies then separate with a ',')"
+            : ""}
+        </p>
+        <textarea
+          type="text"
+          placeholder="Movies"
+          value={movies}
+          onChange={(e) => setMovies(e.target.value)}
+          rows={5}
+          cols={30}
+          style={{ padding: 5, borderRadius: 4 }}
+        />
         <div>
-          <p>Name</p>
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <p>Height</p>
-          <input
-            type="text"
-            placeholder="Height"
-            value={height}
-            onChange={(e) => setHeight(e.target.value)}
-          />
-          <p>Movies</p>
-          <textarea
-            type="text"
-            placeholder="Movies"
-            value={movies}
-            onChange={(e) => setMovies(e.target.value)}
-            rows={5} 
-            cols={30}
-          />
-          <div>
-            <button onClick={() => handleAddOrUpdateCharacter()}>Submit</button>
-          </div>
+          <button onClick={() => handleAddOrUpdateCharacter()}>
+            {person.id && person.id !== null ? "Save" : "Add"}
+          </button>
         </div>
+        {/* </div> */}
       </div>
     </Modal>
   );

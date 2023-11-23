@@ -98,9 +98,10 @@ export default function Character() {
       )}
       <button
         className="button-outline"
+        id="character-button"
         onClick={() => handleCharacterClick(true)}
       >
-        Add
+        Add your favorite characters!!!
       </button>
       {!loading && (
         <>

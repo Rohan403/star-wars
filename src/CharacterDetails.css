@@ -18,9 +18,11 @@
 /* ---------------------------------------- */
 .modal-content {
    display: flex;
-   padding: 60px;
-   align-items: stretch;
-   flex-wrap: wrap;
+   flex-direction: column;
+   /* padding: 60px; */
+   /* align-items: stretch; */
+   /* flex-wrap: wrap; */
+   gap: 10px;
 }
 .info-container,
 .vehicles-container {
@@ -77,8 +79,8 @@
 }
 @media all and (max-width: 1920px) {
    .ReactModal__Content {
-      min-width: 55vw;
-      min-height: 75vh;
+      min-width: 2vw;
+      min-height: 50vh;
    }
    .vertical-divider {
       margin: 0 90px;
@@ -127,19 +129,6 @@
       flex-direction: column;
       padding: 50px;
    }
-   .vertical-divider {
-      display: none;
-   }
-   .vehicles-container h4 {
-      margin: 30px 0 30px 0;
-   }
-   .vehicle-button {
-      width: 350px;
-   }
-   .info-container .character-img {
-      width: 350px;
-      height: 350px;
-   }
    .close-button {
       top: 15px;
       right: 25px;
@@ -151,7 +140,7 @@
       height: 30px;
    }
 }
-@media all and (max-width: 540px) {
+/* @media all and (max-width: 540px) {
    .ReactModal__Content {
       min-width: 95vw;
       min-height: 90vh;
@@ -182,4 +171,4 @@
       width: 25px;
       height: 25px;
    }
-}
+} */

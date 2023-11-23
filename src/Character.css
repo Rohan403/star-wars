@@ -23,6 +23,9 @@
    padding: 20px;
    position: relative;
 }
+#character-button{
+   margin-bottom: 40px;
+}
 .character-click {
    cursor: pointer;
 }
