@@ -26,10 +26,12 @@
 #character-button{
    margin-bottom: 40px;
 }
-.character-click {
-   cursor: pointer;
+.spinner-container {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 200px;
 }
-.spinner-container,
 .close-button {
    background: none;
    position: absolute;

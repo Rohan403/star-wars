@@ -12,61 +12,50 @@ export default function CharacterDetails({
   const [name, setName] = useState("");
   const [height, setHeight] = useState("");
   const [movies, setMovies] = useState("");
-
+  const [nameErr, setNameErr] = useState(false);
+  const [heightErr, setHeightErr] = useState(false);
+  const [movieErr, setMovieErr] = useState(false);
 
   useEffect(() => {
-    // Set form fields with data of the selected character for editing
-    if (person.id !== null) {
+    if (person.id) {
       const selectedCharacter = people.find(
         (character) => character.id === person.id
       );
       if (selectedCharacter) {
-        setName(selectedCharacter.name || "");
-        setHeight(selectedCharacter.height || "");
-        setMovies(
-          selectedCharacter.movies
-            ? selectedCharacter.movies.join(',')
-            : ""
-        );
+        const { name, height, movies } = selectedCharacter;
+        setName(name || "");
+        setHeight(height || "");
+        setMovies(movies ? movies.join(",") : "");
       }
     }
   }, [person, people]);
 
-  const handleAddOrUpdateCharacter = () => {
-    if (!name?.trim() || !height?.trim() || !movies) {
-      alert("Please fill out all fields.");
+  const updateLocalStorage = (characters) => {
+    localStorage.setItem("charactersData", JSON.stringify(characters));
+  };
+
+  const handleAddOrUpdateCharacter = (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+    const hasError = !name.trim() || !height.trim() || !movies.trim();
+    if (hasError) {
+      setNameErr(!name.trim());
+      setHeightErr(!height.trim());
+      setMovieErr(!movies.trim());
       return;
     }
-    if (person.id && person.id !== null) {
-      // Editing existing character
-      const updatedCharacters = people.map((character) =>
-        character.id === person.id
-          ? {
-              ...character,
-              name: name,
-              height: height,
-              movies: movies.split(","),
-            }
-          : character
-      );
-      console.log('updatedCharacters......',updatedCharacters)
-      // Update the state and localStorage
-      setCharacters(updatedCharacters);
-      localStorage.setItem("charactersData", JSON.stringify(updatedCharacters));
-    } else {
-      // Adding a new character
-      const newCharacter = {
-        id: people.length + 1,
-        name: name,
-        height: height,
-        movies: movies.split(","),
-      };
-      const updatedCharacters = [...people, newCharacter];
-
-      // Update the state and localStorage
-      setCharacters(updatedCharacters);
-      localStorage.setItem("charactersData", JSON.stringify(updatedCharacters));
-    }
+    const updatedCharacters = person.id
+      ? people.map((character) =>
+          character.id === person.id
+            ? { ...character, name, height, movies: movies.split(",") }
+            : character
+        )
+      : [
+          ...people,
+          { id: people.length + 1, name, height, movies: movies.split(",") },
+        ];
+    // Update the state and localStorage
+    setCharacters(updatedCharacters);
+    updateLocalStorage(updatedCharacters);
 
     // Reset form fields and selected character ID
     setName("");
@@ -76,61 +65,73 @@ export default function CharacterDetails({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onClose}
-    >
+    <Modal isOpen={isOpen} onRequestClose={onClose}>
       <button className="close-button" onClick={onClose}>
         <img src="/img/x-close.svg" alt="Close" />
       </button>
       <div className="modal-content">
-        <p>Name</p>
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => {
-            // Check if the input matches the regex pattern (only numbers)
-            if (!/\d/.test(e.target.value)) {
-              setName(e.target.value);
-            }
-          }}
-          style={{ padding: 5, borderRadius: 4 }}
-        />
-        <p>Height</p>
-        <input
-          type="text"
-          placeholder="Height"
-          value={height}
-          onChange={(e) => {
-            // Check if the input matches the regex pattern (only numbers)
-            if (/^\d*$/.test(e.target.value)) {
-              setHeight(e.target.value);
-            }
-          }}
-          style={{ padding: 5, borderRadius: 4 }}
-          maxLength={3}
-        />
-        <p>
-          Movies{" "}
-          {person.id == null
-            ? "(If multiple movies then separate with a ',')"
-            : ""}
-        </p>
-        <textarea
-          type="text"
-          placeholder="Movies"
-          value={movies}
-          onChange={(e) => setMovies(e.target.value)}
-          rows={5}
-          cols={30}
-          style={{ padding: 5, borderRadius: 4 }}
-        />
-        <div>
-          <button onClick={() => handleAddOrUpdateCharacter()}>
-            {person.id && person.id !== null ? "Save" : "Add"}
-          </button>
-        </div>
+        <form onSubmit={handleAddOrUpdateCharacter}>
+          <p>Name</p>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => {
+              !/\d/.test(e.target.value) && setName(e.target.value);
+              setNameErr(false);
+            }}
+            style={{
+              padding: 5,
+              borderRadius: 4,
+              borderColor: nameErr ? "red" : "",
+              borderStyle: "solid",
+              borderWidth: 2,
+            }}
+          />
+          <p>Height</p>
+          <input
+            type="text"
+            placeholder="Height"
+            value={height}
+            onChange={(e) => {
+              /^\d*$/.test(e.target.value) && setHeight(e.target.value);
+              setHeightErr(false);
+            }}
+            style={{
+              padding: 5,
+              borderRadius: 4,
+              borderColor: heightErr ? "red" : "",
+              borderStyle: "solid",
+              borderWidth: 2,
+            }}
+            maxLength={3}
+          />
+          <p>
+            Movies{" "}
+            {!person.id ? "(If multiple movies then separate with a ',')" : ""}
+          </p>
+          <textarea
+            type="text"
+            placeholder="Movies"
+            value={movies}
+            onChange={(e) => {
+              setMovies(e.target.value);
+              setMovieErr(false);
+            }}
+            rows={5}
+            cols={30}
+            style={{
+              padding: 5,
+              borderRadius: 4,
+              borderColor: movieErr ? "red" : "",
+              borderStyle: "solid",
+              borderWidth: 2,
+            }}
+          />
+          <div>
+            <button type="submit">{person.id ? "Save" : "Add"}</button>
+          </div>
+        </form>
       </div>
     </Modal>
   );

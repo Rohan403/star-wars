@@ -119,10 +119,9 @@ export default function Character() {
                     </button>
                   )}
                     <img
-                      className="character-img character-click"
+                      className="character-img"
                       src={faker.image.avatar()}
                       alt={person.name}
-                      onClick={() => handleCharacterClick(person)}
                     />
                     <h4>{person.name}</h4>
                     <p>Height: {person.height}</p>
