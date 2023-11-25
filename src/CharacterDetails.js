@@ -59,7 +59,6 @@ export default function CharacterDetails({
         id: people.length + 1,
         name: name,
         height: height,
-        // movies: [{ title: movies }],
         movies: movies.split(","),
       };
       const updatedCharacters = [...people, newCharacter];
@@ -80,19 +79,16 @@ export default function CharacterDetails({
     <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
-      // contentLabel="Character Details"
     >
       <button className="close-button" onClick={onClose}>
         <img src="/img/x-close.svg" alt="Close" />
       </button>
       <div className="modal-content">
-        {/* <div> */}
         <p>Name</p>
         <input
           type="text"
           placeholder="Name"
           value={name}
-          // onChange={(e) => setName(e.target.value)}
           onChange={(e) => {
             // Check if the input matches the regex pattern (only numbers)
             if (!/\d/.test(e.target.value)) {
@@ -106,7 +102,6 @@ export default function CharacterDetails({
           type="text"
           placeholder="Height"
           value={height}
-          // onChange={(e) => setHeight(e.target.value)}
           onChange={(e) => {
             // Check if the input matches the regex pattern (only numbers)
             if (/^\d*$/.test(e.target.value)) {
@@ -136,7 +131,6 @@ export default function CharacterDetails({
             {person.id && person.id !== null ? "Save" : "Add"}
           </button>
         </div>
-        {/* </div> */}
       </div>
     </Modal>
   );

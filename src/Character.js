@@ -130,7 +130,7 @@ export default function Character() {
                     <ul>
                       {person.movies.map((movie, movieIndex) => (
                         <li key={movieIndex}>
-                          <p>{movie}</p>
+                          <p>{movieIndex + 1}. {movie}</p>
                         </li>
                       ))}
                     </ul>
